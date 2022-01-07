@@ -1,11 +1,6 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import joblib
-from firstmodel import Firstmodel
-
-f = Firstmodel()
-# from only_for_API import vectorize_new_instance
-
 
 app = Flask(__name__)
 model = joblib.load('text_classification4.joblib')
@@ -29,14 +24,18 @@ def predict():
     
     if language == 'ar':
         prediction = model2.predict(X_new_feature)
-    elif language =="x":
-        prediction = f.func()
+    # elif language =="x":
+    #     prediction = f.func()
     else:
         prediction = model.predict(X_new_feature)
 
     output = prediction[0]
-
-    return render_template('index.html', prediction_text='Sentence is {}'.format(output))
+    if output == 'pos' or output == 'positive':
+        return render_template('good.html', prediction_text='Sentence is {}'.format(output))
+    elif output == 'neg' or output == 'negative':
+        return render_template('bad.html', prediction_text='Sentence is {}'.format(output))
+    else :
+        return render_template('nutral.html', prediction_text='Sentence is {}'.format(output))
     
 
     
